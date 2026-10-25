@@ -1,0 +1,89 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          String         @default("STUDENT") // STUDENT, CLASS_REPRESENTATIVE, TEACHER
+  institution   String?        @default("School of Computer Science & Engineering, B.Tech")
+  semester      String?        @default("6th Semester")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  subjects      Subject[]
+  assignments   Assignment[]
+  notifications InAppNotification[]
+  reminders     Reminder[]
+}
+
+model Subject {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  code        String
+  professor   String?
+  color       String       @default("#3b82f6")
+  credits     Int          @default(3)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  assignments Assignment[]
+}
+
+model Assignment {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId      String
+  subject        Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  title          String
+  description    String?
+  taskType       String       @default("ASSIGNMENT") // ASSIGNMENT, LAB_RECORD, PROJECT_REPORT, QUIZ_PREP, PRACTICE_PROBLEMS
+  dueDate        DateTime
+  priority       String       @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  status         String       @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, OVERDUE
+  submissionType String       @default("ONLINE_PORTAL") // ONLINE_PORTAL, HARD_COPY, GITHUB_REPO, EMAIL
+  submissionLink String?
+  estimatedHours Float?       @default(2.0)
+  completedAt    DateTime?
+  isArchived     Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  reminders      Reminder[]
+}
+
+model Reminder {
+  id           String      @id @default(cuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignmentId String
+  assignment   Assignment  @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  reminderTime DateTime
+  remindBefore String      @default("24_HOURS") // 1_HOUR, 3_HOURS, 24_HOURS, 48_HOURS
+  type         String      @default("NOTIFICATION_PUSH") // NOTIFICATION_PUSH, IN_APP_POPUP, EMAIL_SCHEDULE
+  isSent       Boolean     @default(false)
+  sentAt       DateTime?
+  createdAt    DateTime    @default(now())
+}
+
+model InAppNotification {
+  id           String      @id @default(cuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  message      String
+  type         String      @default("DEADLINE_APPROACHING") // DEADLINE_APPROACHING, TASK_OVERDUE, TASK_COMPLETED, SYSTEM_ANNOUNCEMENT
+  isRead       Boolean     @default(false)
+  assignmentId String?
+  createdAt    DateTime    @default(now())
+}

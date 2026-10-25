@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "EcoCycle | Certified E-Waste Disposal & Sustainable Material Recovery",
+  title: 'Assignment Reminder App — Smart Academic Task Manager',
   description:
-    "Recycle your electronic waste safely with certified doorstep pickup, DoD 5220.22-M data destruction, and zero-landfill processing.",
+    'An intelligent mobile and web solution designed to streamline academic submissions, eradicate late deadlines, and elevate student productivity. B.Tech Engineering Minor Project.',
   icons: {
-    icon: "/logo.svg",
+    icon: '/favicon.ico',
   },
 };
 
@@ -16,16 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="dark scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-surface text-on-surface min-h-screen flex flex-col antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+      <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
         {children}
       </body>
     </html>
